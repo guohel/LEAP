@@ -15,7 +15,7 @@ from setuptools.command.install import install
 from sys import platform as _platform
 if _platform == "linux" or _platform == "linux2":
     lib_fname = 'build/lib/libleapct.so'
-    retVal = os.system(r'sh ./etc/build.sh')
+    retVal = os.system(r'sh ./etc/build_fast.sh')
     if retVal != 0:
         print('Failed to compile!')
         quit()

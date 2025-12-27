@@ -2,7 +2,8 @@
 This is a C++/CUDA library (Linux, Windows, and Mac*) of 3D tomographic algorithms (pre-processing algorithms, projectors, and analytic (FBP) and iterative reconstruction algorithms) with a Python interface.  The projectors (forward and back projection) are implemented for both multi-GPU and multi-core CPU and we provide bindings to PyTorch to achieve differentiable forward and backward projectors for AI/ML-driven Computed Tomography (CT) applications.
 
 <p align="center">
-  <img src=https://github.com/LLNL/LEAP/blob/main/documentation/LEAPoverview.png>
+  <!-- <img src=https://github.com/LLNL/LEAP/blob/main/documentation/LEAPoverview.png> -->
+  <img src=./documentation/LEAPoverview.png>
 </p>
 
 There are a lot of CT reconstruction packages out there, so why choose LEAP?  In short, LEAP has more accurate projectors and FBP algorithms, more features, and most algorithms run as fast or faster than other popular CT reconstruction packages, but [here](https://github.com/LLNL/LEAP/blob/main/LEAP_features.md) is a more detailed list.
@@ -27,7 +28,7 @@ Demo scripts for AI/ML/DL applications in the [demo_leaptorch](https://github.co
 
 As a simple demonstration of the accuracy of our projectors we show below the results of FDK reconstructions using ASTRA and LEAP of the walnut CT data.  The LEAP reconstruction has 1.7 times higher SNR than ASTRA.  An explanation for this improvement in SNR can be found [here](https://github.com/LLNL/LEAP/blob/main/results/SF_vs_VD.md).
 <p align="center">
-  <img src=https://github.com/LLNL/LEAP/blob/main/results/walnut_comparison.png>
+  <img src=./results/walnut_comparison.png>
 </p>
 
 ## Future Releases
