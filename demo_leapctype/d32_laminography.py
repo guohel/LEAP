@@ -34,11 +34,11 @@ sdd = 1400 # source-to-detector distance (mm)
 leapct.set_conebeam(numAngles, numRows, numCols, pixelSize, pixelSize, 0.5*(numRows-1), 0.5*(numCols-1), leapct.setAngleArray(numAngles, 360.0), sod, sdd)
 
 # Set the lamonography angle which is the rotation of the axis of rotation from the z-axis
-laminographyAngle = 40.0 # degrees
+laminographyAngle = 70.0 # degrees
 
 # Switch to modular-beam coordinates
 leapct.convert_to_modularbeam()
-
+leapct.sketch_system('yz', [0])
 # Get the source positions, detector positions, and detector orientation for all projections
 sourcePositions = leapct.get_sourcePositions()
 moduleCenters = leapct.get_moduleCenters()
@@ -53,6 +53,9 @@ colVecs = leapct.get_colVectors()
 sourcePositions[:,2] = np.tan(laminographyAngle*np.pi/180.0)*sod
 moduleCenters[:,2] = -np.tan(laminographyAngle*np.pi/180.0)*(sdd-sod)
 
+leapct.set_modularbeam(numAngles, numRows, numCols, pixelSize, pixelSize, sourcePositions, moduleCenters, rowVecs, colVecs)
+leapct.sketch_system('yz', [0])
+
 # Use the following 7 lines to rotate the detector as well
 from scipy.spatial.transform import Rotation as R
 sin_theta = np.sin(-0.5*laminographyAngle*np.pi/180.0)
@@ -61,6 +64,8 @@ for n in range(numAngles):
     q = np.append(colVecs[n,:].copy()*sin_theta, cos_theta)
     A = R.from_quat(q).as_matrix()
     rowVecs[n,:] = np.matmul(A, rowVecs[n,:])
+
+
 
 # Now re-set the modular-beam geometry with the modified source and detector locations
 leapct.set_modularbeam(numAngles, numRows, numCols, pixelSize, pixelSize, sourcePositions, moduleCenters, rowVecs, colVecs)
@@ -77,7 +82,8 @@ leapct.set_numZ(2*int(np.ceil(12.0/leapct.get_voxelHeight()+1))) # reduce the nu
 # Print the parameters to the screen.  We also plot 5 of the projections to ensure
 # that the geometry was set properly
 leapct.print_parameters()
-leapct.sketch_system([0, 45, 90, 135, 180])
+# leapct.sketch_system('yz', [0, 45, 90, 135, 180, 250])
+leapct.sketch_system('yz', [0])
 
 # Allocate space for the projections and the volume
 # You don't have to use these functions; they are provided just for convenience
@@ -140,6 +146,7 @@ f[:] = 0.0
 startTime = time.time()
 #leapct.backproject(g,f)
 leapct.FBP(g,f)
+leapct.display(f)
 filters = filterSequence(1.0e0)
 filters.append(TV(leapct, delta=0.02/20.0))
 #leapct.ASDPOCS(g,f,10,10,1,filters)
