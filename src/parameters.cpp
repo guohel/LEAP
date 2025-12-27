@@ -1265,7 +1265,7 @@ bool parameters::set_sourcesAndModules(float* sourcePositions_in, float* moduleC
 			minSourceZ = min(minSourceZ, sourcePositions[3 * i + 2]);
 			maxSourceZ = max(maxSourceZ, sourcePositions[3 * i + 2]);
 			//if (fabs(rowVectors[3 * i + 2]) < 0.995) // max 5.732 degree panel rotation
-			if ((rowVectors[3 * i + 2]) < 0.9961) // max 5.0 degree panel rotation
+			if ((rowVectors[3 * i + 2]) < 0.9961) // max 5.0 degree panel rotation  // Gee https://github.com/LLNL/LEAP/issues/164 “Error: FBP only implemented for modular geometries whose rowVectors are aligned with the z-axis.”
 				isAxial = false;
 		}
 		sod = sod / float(numPairs);

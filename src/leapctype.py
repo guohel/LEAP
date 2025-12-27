@@ -6270,18 +6270,19 @@ class tomographicModels:
         except:
             print('Cannot load napari, to install run this command:')
             print('pip install napari[all]')
-            
+
     def sketchSystem(self,whichView=None):
         """Alias for sketch_system
         """
         self.sketch_system(whichView)
             
-    def sketch_system(self,whichView=None):
+    def sketch_system(self, viewPlane: str | None = None, whichView=None):
         """ Uses matplot lib to sketch the CT geometry and CT volume
         
         The CT geometry parameters and the CT volume parameters must be set prior to running this function.
         
         Args:
+            viewPlane (str): "XY"/"xy","YZ","XZ",default "XY"
             whichView (int): if provided displays the source and detector at the specified view index
         """
         if self.get_numAngles() <= 0 or self.get_numRows() <= 0 or self.get_numCols() <= 0:
@@ -6289,6 +6290,8 @@ class tomographicModels:
             return False
     
         from mpl_toolkits.mplot3d.art3d import Poly3DCollection, Line3DCollection
+        import matplotlib
+        matplotlib.use("Qt5Agg")  # 关键：先设后端
         import matplotlib.pyplot as plt
 
         fig = plt.figure()
@@ -6322,11 +6325,19 @@ class tomographicModels:
         ax.set_xlim3d([x_middle - plot_radius, x_middle + plot_radius])
         ax.set_ylim3d([y_middle - plot_radius, y_middle + plot_radius])
         ax.set_zlim3d([z_middle - plot_radius, z_middle + plot_radius])
-        
-        ax.view_init(90, -90)
-        #ax.figure.set_size_inches(8, 8)
+
+        ax.view_init(elev=90, azim=-90)
+        if viewPlane is not None:
+            if viewPlane.upper() == 'YZ':
+                ax.view_init(elev=0, azim=0)    # 初始化XY显示，X为横轴，Y为纵轴
+            elif viewPlane.upper() == 'XZ':
+                ax.view_init(elev=0, azim=-90)  # 初始化YZ显示
+
+        ax.figure.set_size_inches(8, 8)
+        # ax.figure.set_size_inches(24, 24)
         plt.show()
-    
+        # plt.show(block=False)
+
     def drawCT(self, ax, whichView=None):
         from mpl_toolkits.mplot3d.art3d import Poly3DCollection, Line3DCollection
         import matplotlib.pyplot as plt
